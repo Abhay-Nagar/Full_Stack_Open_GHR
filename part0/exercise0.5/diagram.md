@@ -5,26 +5,26 @@ sequenceDiagram
     participant server
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa
-    server activate
+    activate server
     server-->>browser: HTML doc
-    server deactivate
+    deactivate server
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
-    server activate
+    activate server
     server-->>browser: main.css
-    server deactivate
+    deactivate server
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
-    server activate
+    activate server
     server-->>browser: spa.js
-    server deactivate
+    deactivate server
 
      Note right of browser: browser start running spa.js which fetches JSON data from server using GET
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
-    server activate
+    activate server
     server-->>browser: data.json
-    server deactivate
+    deactivate server
 
     Note right of browser: browser executes the callback function that renders the notes from the JSON file to the page
 ```
