@@ -8,6 +8,8 @@ sequenceDiagram
     server-->>browser: URL redirect https://studies.cs.helsinki.fi/exampleapp/notes
     deactivate server
 
+    Note right of browser: server responds with code 302 which is a URL redirect requesting the browser to GET specific location
+
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
     server-->>browser: HTML document
