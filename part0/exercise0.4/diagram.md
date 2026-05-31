@@ -3,6 +3,11 @@ sequenceDiagram
     participant browser
     participant server
 
+    browser ->>server: POST text input
+    activate server
+    server-->>browser: URL redirect https://studies.cs.helsinki.fi/exampleapp/notes
+    deactivate server
+
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
     server-->>browser: HTML document
