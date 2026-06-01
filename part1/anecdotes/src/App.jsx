@@ -1,5 +1,8 @@
 import { useState } from 'react'
 
+
+const Button = ({onClick, text}) => <button onClick={onClick}>{text}</button>
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -36,8 +39,8 @@ const maxIndex = votes.indexOf(maxVotes)
       <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
-      <button onClick={handleVote}>vote</button>
-      <button onClick={handleSelection}>Generate Anecdote</button>
+      <Button onClick = {handleVote} text='vote'/>
+      <Button onClick = {handleSelection} text='Generate Anecdote'/>
       <h1>Anecdote with most votes</h1>
       <p>{anecdotes[maxIndex]}</p>
       <p>has {votes[maxIndex]} votes</p>
