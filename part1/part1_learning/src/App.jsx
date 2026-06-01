@@ -1,27 +1,27 @@
-const Hello = (props) => {
+import { useState } from 'react'
 
-  console.log(props)
-  return (
-    <div>
-      <p>
+const Display = props => <div>{props.value}</div>
 
-        Hello {props.name}, you are {props.age} years old
-      </p>
-    </div>
-  )
-}
+const Button = (props) => (
+  <button onClick={props.onClick}>
+    {props.text}
+  </button>
+)
 
 const App = () => {
+  const [value, setValue] = useState(10)
 
-  const name = 'Peter'
-  const age = 10
+  const setToValue = newValue => {
+    console.log('value now', newValue)
+    setValue(newValue)
+  }
 
   return (
     <div>
-      <h1>Greetings</h1>
-
-      <Hello name='Maya' age={26 + 10} />
-      <Hello name={name} age={age} />
+      <Display value={value} />
+      <Button onClick={() => setToValue(1000)} text="thousand" />
+      <Button onClick={() => setToValue(0)} text="reset" />
+      <Button onClick={() => setToValue(value + 1)} text="increment" />
     </div>
   )
 }
