@@ -6,9 +6,9 @@ const Header = ({courseName}) => {
   
   return (
     <div>
-      <h1>
+      <h2>
         {courseName}
-      </h1>
+      </h2>
     </div>
   )
 }
