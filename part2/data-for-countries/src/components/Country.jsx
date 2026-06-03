@@ -1,4 +1,13 @@
 
-const Country = ({country}) => <li>{country.name.common}</li>
+const Country = ({country, onClick}) => {
 
+
+return(
+<li>
+    {country.name.common}
+    <button onClick={() => onClick(country)}>Show</button>
+</li> 
+
+)
+}
 export default Country
