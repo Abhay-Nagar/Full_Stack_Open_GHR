@@ -1,9 +1,9 @@
 import { useState, useEffect} from 'react'
 import phonebookService from './services/phonebook'
+import Notification from './components/Notification'
+import './index.css'
 
-
-
-const Number = ({person, onDelete}) => {
+const Person = ({person, onDelete}) => {
 
 return(
 
@@ -13,13 +13,15 @@ return(
 
 const Filter = ({value, onChange}) => <div>filter shown with <input value={value} onChange={onChange}/></div>
 
-const Persons = ({persons, onDelete}) => <div>{persons.map(person => <Number key={person.name} person={person} onDelete={() => onDelete(person.id)}/>)}</div>
+const Persons = ({persons, onDelete}) => <div>{persons.map(person => <Person key={person.name} person={person} onDelete={() => onDelete(person.id)}/>)}</div>
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState('Some message here...')
+  const [isSuccess, setIsSuccess] = useState(true)
 
   useEffect(() =>{
 
@@ -43,6 +45,7 @@ const App = () => {
 
     setNewNumber(event.target.value)
   }
+
   const addPerson = (event) => {
     
     event.preventDefault()
@@ -57,29 +60,45 @@ const App = () => {
         const pers = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
         phonebookService.update(pers.id, newObject).then(response => {
 
+          setMessage(`Updated ${response.name}`)
+          setIsSuccess(true)
+          setTimeout(() => {
+          setMessage(null)
+        }, 5000)
           setPersons(persons.map(person => person.id === pers.id ? response : person))
 
-        })
+        }).catch(error => {
+      setMessage(
+          `${pers.name} was already removed from server`
+        )
+        setIsSuccess(false)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      setPersons(persons.filter(n => n.id !== pers.id))
+    })
+
+
       setNewName('')
       setNewNumber('')
       return
       }
       return
     }
-    
 
-    
-    
     phonebookService.create(newObject).then(person =>{
 
+      setMessage(`Added ${person.name}`)
+      setIsSuccess(true)
+      setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       setPersons(persons.concat(person))
       setNewName('')
       setNewNumber('')
     })
-    
-    
-  
   }
+
   const handleFilter = (event) =>{
 
     setFilter(event.target.value)
@@ -93,7 +112,13 @@ const App = () => {
     console.log('this is handleDelete', id)
     phonebookService.destroy(id).then( ()=> {
       console.log("this is id in delete handler", id)
+      setMessage(`${pers.name} has been deleted succesfully`)
+      setIsSuccess(true)
+      setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       setPersons(persons.filter(person => person.id !== id))
+
     
     })
   }
@@ -103,6 +128,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={message} isSuccess={isSuccess}/>
       
       <Filter value={filter} onChange={handleFilter}/>
       
