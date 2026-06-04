@@ -32,7 +32,7 @@ if(!countries){
 }
 
 //filters the countries array to remove any countries that dont include filter
-const countriesToShow = countries.filter(country => country.name.official.toLowerCase().includes(filter.toLowerCase()))
+const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(filter.toLowerCase()))
 
 //renders different html if the num of countries that include filter is >10
 if(countriesToShow.length>10){
