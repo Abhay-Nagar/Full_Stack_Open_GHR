@@ -1,7 +1,6 @@
 import Country from './Country'
 
 const Countries = ({countries, onClick}) => {
-    console.log('this is countries', countries)
     return(
         <ul>
           

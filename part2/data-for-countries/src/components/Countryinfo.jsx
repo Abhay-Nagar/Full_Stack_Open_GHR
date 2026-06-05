@@ -6,8 +6,6 @@ import {useState, useEffect} from 'react'
 const Countryinfo = ({country}) =>{
 
     const [weather, setWeather] = useState(null)
-
-    console.log('this is country info',country.capitalInfo.latlng)
     const imageUrl = country.flags.png
     
 
@@ -15,7 +13,6 @@ useEffect(() => {
     countryService.getWeather(country).then((response) =>{
     setWeather(response)
     })
-    console.log(weather)
 },[country])
    
 
