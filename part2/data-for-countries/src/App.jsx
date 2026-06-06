@@ -16,8 +16,6 @@ const handleFilter = (event) =>{
 
 //Handles clicking the how button, we pass in the arg in the country comp
 const handleShowButton = (country) => {
-  console.log('this is handleshowbutton', country)
-  
   setFilter(country.name.common)
 }
 
