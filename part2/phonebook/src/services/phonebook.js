@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const useUrl = 'https://full-stack-open-ghr-1.onrender.com/api/persons'
+const useUrl = 'http://localhost:3001/api/persons'
 
 const getAll = () =>{
     console.log("getAll running")

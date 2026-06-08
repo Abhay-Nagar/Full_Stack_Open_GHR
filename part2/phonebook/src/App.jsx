@@ -65,7 +65,7 @@ const App = () => {
           setTimeout(() => {
           setMessage(null)
         }, 5000)
-          setPersons(persons.map(person => person.id === pers.id ? response : person))
+          setPersons(persons.map(person => {person.id === pers.id ? response : person}))
 
         }).catch(error => {
       setMessage(
