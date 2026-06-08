@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const useUrl = 'http://localhost:3001/persons'
+const useUrl = 'http://localhost:3001/api/persons'
 
 const getAll = () =>{
     console.log("getAll running")
-    const request = axios.get('http://localhost:3001/persons')
+    const request = axios.get(useUrl)
     return request.then(persons => persons.data)
 
 }
