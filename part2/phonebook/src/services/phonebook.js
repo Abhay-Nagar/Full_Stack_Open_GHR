@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const useUrl = 'http://localhost:3001/api/persons'
+const useUrl = '/api/persons'
 
 const getAll = () =>{
     console.log("getAll running")
@@ -29,6 +29,7 @@ const destroy = (id) => {
 }
 
 const update = (id, newObject) => {
+    console.log('this is front end update fn',id)
   const request = axios.put(`${useUrl}/${id}`, newObject)
   return request.then(response => response.data)
 }
