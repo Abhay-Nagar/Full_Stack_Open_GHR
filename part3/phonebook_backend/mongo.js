@@ -19,24 +19,24 @@ const Person = mongoose.model('Person', personSchema)
 if(name && number){
 
   const person = new Person({
-  name: name,
-  number: number,
-})
+    name: name,
+    number: number,
+  })
 
-console.log(person)
+  console.log(person)
 
-person.save().then(result => {
-  console.log(`Added ${name} number ${number} to phonebook`)
-  mongoose.connection.close()
-})
+  person.save().then(() => {
+    console.log(`Added ${name} number ${number} to phonebook`)
+    mongoose.connection.close()
+  })
 
 }
 else{
-    console.log("listing phonebook")
-    Person.find({}).then(result => {
-      result.forEach(Person => {
-        console.log(Person)
-      })
-      mongoose.connection.close()
+  console.log('listing phonebook')
+  Person.find({}).then(result => {
+    result.forEach(Person => {
+      console.log(Person)
     })
+    mongoose.connection.close()
+  })
 }
