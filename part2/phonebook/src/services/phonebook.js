@@ -3,7 +3,7 @@ import axios from 'axios'
 const useUrl = '/api/persons'
 
 const getAll = () =>{
-    console.log("getAll running")
+    
     const request = axios.get(useUrl)
     return request.then(persons => persons.data)
 

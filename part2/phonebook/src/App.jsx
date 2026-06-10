@@ -28,7 +28,6 @@ const App = () => {
     console.log('calling getAll')
     phonebookService.getAll().then( response =>{
 
-  
       setPersons(response)
       
     })
@@ -99,6 +98,11 @@ const App = () => {
       setPersons(persons.concat(person))
       setNewName('')
       setNewNumber('')
+    })
+    .catch(error => {
+
+      console.log(error.response.data.error)
+      setMessage(error.response.data.error)
     })
   }
 
