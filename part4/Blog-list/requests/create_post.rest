@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "What Every Programmer Absolutely, Positively Needs To Know About Encodings And Character Sets",
+  "author": "Joel Spolsky",
+  "url": "https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/",
+  "likes": 18
+}
