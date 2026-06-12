@@ -46,6 +46,10 @@ const mostBlogs = (blogs) => {
 
 const mostLikes = (blogs) => {
 
+  if (blogs.length === 0) {
+    return null
+  }
+
   const authorLikes = Object.entries(blogs.reduce((sum, blog) => {
     sum[blog.author] = (sum[blog.author] || 0) + blog.likes
     return sum
