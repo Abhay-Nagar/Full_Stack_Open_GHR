@@ -93,7 +93,7 @@ test('if no title then responds with 400' ,async () => {
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
-test.only('if no url then responds with 400' ,async () => {
+test('if no url then responds with 400' ,async () => {
   const newBlog = {
     title: 'Type wars',
     author: 'Robert C. Martin',
@@ -109,6 +109,35 @@ test.only('if no url then responds with 400' ,async () => {
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
+test('a blog can be deleted', async () => {
+  const idToDelete = '5a422ba71b54a676234d17fb'
+
+  await api
+    .delete(`/api/blogs/${idToDelete}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length-1)
+})
+
+test.only('a blog can be updated', async () => {
+
+  const blogToUpdate = {
+    id: '5a422ba71b54a676234d17fb',
+    likes: 100,
+  }
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blogToUpdate)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAfterUpdate = await helper.blogsInDb()
+  const blogAfterUpdate = blogsAfterUpdate.find(blog => blog.id === blogToUpdate.id)
+
+  assert.strictEqual(blogAfterUpdate.likes, 100)
+
+})
 
 after(async () => {
   await mongoose.connection.close()
