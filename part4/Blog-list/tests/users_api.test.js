@@ -20,7 +20,7 @@ beforeEach(async () => {
   await newUser.save()
 })
 
-test.only('valid user can be succesfully added', async () => {
+test('valid user can be succesfully added', async () => {
 
   const newUser = {
     username: 'mluukai',
@@ -40,7 +40,7 @@ test.only('valid user can be succesfully added', async () => {
 
 })
 
-test.only('reject adding user with existing username', async () => {
+test('reject adding user with existing username', async () => {
   const usersAtStart = await helper.usersInDb()
   const newUser = {
     name: 'Arto Hellas',
@@ -56,6 +56,48 @@ test.only('reject adding user with existing username', async () => {
   console.log('THIS IS BS',  result.body.error)
   const usersAtEnd = await helper.usersInDb()
   assert(result.body.error.includes('expected `username` to be unique'))
+
+  assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+
+})
+
+test.only('reject user if username is too short', async () => {
+  const usersAtStart = await helper.usersInDb()
+  const newUser = {
+    username: 'ml',
+    name: 'Matti Luukkainen',
+    password: 'kforkode'
+  }
+
+  const result = await api
+    .post('/api/users')
+    .send(newUser)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  const usersAtEnd = await helper.usersInDb()
+  assert(result.body.error.includes('`username` (`ml`, length 2) is shorter than the minimum allowed length '))
+
+  assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+
+})
+
+test.only('reject user if password is too short', async () => {
+  const usersAtStart = await helper.usersInDb()
+  const newUser = {
+    username: 'mliikai',
+    name: 'Matti Luukkainen',
+    password: 'kf'
+  }
+
+  const result = await api
+    .post('/api/users')
+    .send(newUser)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  const usersAtEnd = await helper.usersInDb()
+  assert(result.body.error.includes('password is shorter than minimum allowed length (3)'))
 
   assert.strictEqual(usersAtEnd.length, usersAtStart.length)
 
