@@ -34,9 +34,9 @@ blogsRouter.post('/', async(request, response) => {
   if(!user){
     return response.status(401).json({ error: 'UserId missong or not valid' })
   }
-
+  blog.user = user.id
   const savedBlog = await blog.save()
-
+  console.log(savedBlog)
   user.blogs = user.blogs.concat(savedBlog.id)
 
   await user.save()
