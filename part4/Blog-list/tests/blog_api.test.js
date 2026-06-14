@@ -3,10 +3,9 @@ const { test, after, beforeEach } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-
+const User = require('../models/user')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
-
 const api = supertest(app)
 
 
@@ -15,6 +14,15 @@ const api = supertest(app)
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
+  console.log('hahahaha')
+  const newUser = new User({
+    _id: new mongoose.Types.ObjectId('5a422bc61b54a676234d17fc'),
+    name: 'Arto Hellas',
+    username: 'hellas',
+    password: 'Jmaps'
+  })
+  await newUser.save()
 })
 
 test('blogs are returned in JSON format',async () => {
@@ -39,7 +47,7 @@ test('unique identifier is called id',async () => {
   assert.strictEqual(blog._id,undefined)
 })
 
-test('a valid note can be added', async () => {
+test.only('a valid note can be added', async () => {
 
   const newBlog = {
     _id: '5a422bc61b54a676234d17fc',
@@ -49,9 +57,13 @@ test('a valid note can be added', async () => {
     likes: 2,
     __v: 0,
   }
+
+  const token = await helper.testToken()
+
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set({ Authorization: `Bearer ${token}` })
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -65,9 +77,13 @@ test('likes property defaults to 0', async () => {
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
   }
+
+  const token = await helper.testToken()
+
   await api
     .post('/api/blogs')
     .send(newBlog)
+    .set({ Authorization: `Bearer ${token}` })
     .expect(201)
     .expect('Content-Type', /application\/json/)
   const blogsAfter = await helper.blogsInDb()
@@ -83,8 +99,11 @@ test('if no title then responds with 400' ,async () => {
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
   }
 
+  const token = await helper.testToken()
+
   await api
     .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
     .send(newBlog)
     .expect(400)
 
@@ -99,8 +118,11 @@ test('if no url then responds with 400' ,async () => {
     author: 'Robert C. Martin',
   }
 
+  const token = await helper.testToken()
+
   await api
     .post('/api/blogs')
+    .set({ Authorization: `Bearer ${token}` })
     .send(newBlog)
     .expect(400)
 
@@ -110,20 +132,22 @@ test('if no url then responds with 400' ,async () => {
 })
 
 test('a blog can be deleted', async () => {
-  const idToDelete = '5a422ba71b54a676234d17fb'
+  const idToDelete = '5a422a851b54a676234d17f7'
+  const token = await helper.testToken()
 
   await api
     .delete(`/api/blogs/${idToDelete}`)
+    .set({ Authorization: `Bearer ${token}` })
     .expect(204)
 
   const blogsAtEnd = await helper.blogsInDb()
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length-1)
 })
 
-test.only('a blog can be updated', async () => {
+test('a blog can be updated', async () => {
 
   const blogToUpdate = {
-    id: '5a422ba71b54a676234d17fb',
+    id: '5a422a851b54a676234d17f7',
     likes: 100,
   }
 

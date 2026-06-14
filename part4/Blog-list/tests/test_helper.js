@@ -1,5 +1,7 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
 const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -7,6 +9,7 @@ const initialBlogs = [
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
     likes: 7,
+    user: new mongoose.Types.ObjectId('5a422bc61b54a676234d17fc'),
     __v: 0,
   },
   {
@@ -27,7 +30,6 @@ const initialBlogs = [
   },
 ]
 
-
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
 
@@ -40,8 +42,23 @@ const usersInDb = async () => {
   return users.map(u => u.toJSON())
 }
 
+const testToken = async () => {
+
+  const usersAtStart = await usersInDb()
+  const userForToken = {
+    username: usersAtStart[0].username,
+    id: usersAtStart[0].id,
+  }
+
+  const token = jwt.sign(userForToken, process.env.SECRET)
+  return token
+}
+
+
+
+
 
 
 module.exports = {
-  initialBlogs, blogsInDb, usersInDb
+  initialBlogs, blogsInDb, usersInDb, testToken
 }

@@ -40,7 +40,7 @@ test('valid user can be succesfully added', async () => {
 
 })
 
-test('reject adding user with existing username', async () => {
+test.only('reject adding user with existing username', async () => {
   const usersAtStart = await helper.usersInDb()
   const newUser = {
     name: 'Arto Hellas',
@@ -61,7 +61,7 @@ test('reject adding user with existing username', async () => {
 
 })
 
-test.only('reject user if username is too short', async () => {
+test('reject user if username is too short', async () => {
   const usersAtStart = await helper.usersInDb()
   const newUser = {
     username: 'ml',
@@ -82,7 +82,7 @@ test.only('reject user if username is too short', async () => {
 
 })
 
-test.only('reject user if password is too short', async () => {
+test('reject user if password is too short', async () => {
   const usersAtStart = await helper.usersInDb()
   const newUser = {
     username: 'mliikai',

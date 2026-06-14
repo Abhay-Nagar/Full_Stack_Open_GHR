@@ -45,7 +45,7 @@ const getTokenFrom = (request, response, next) => {
 }
 
 const userExtractor = async (request, response, next) => {
-  if(request.method === 'GET'){
+  if(request.method === 'GET' || request.method === 'PUT'){
     next()
     return
   }
