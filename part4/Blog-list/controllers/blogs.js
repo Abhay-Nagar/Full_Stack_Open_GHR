@@ -1,7 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
+
 
 
 
@@ -19,14 +18,11 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async(request, response) => {
   const blog = new Blog(request.body)
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  if(!decodedToken){
+  const user = request.user
+  if(!user){
     return response.status(401).json({ error: 'token invalid' })
   }
-  const user = await User.findById(decodedToken.id)
-  if(!user){
-    return response.status(401).json({ error: 'UserId missong or not valid' })
-  }
+
   blog.user = user.id
   const savedBlog = await blog.save()
   console.log(savedBlog)
@@ -38,19 +34,21 @@ blogsRouter.post('/', async(request, response) => {
 
 })
 
-//handles DELETE requests and deletes a blog from the mongodb by its id
+//handles DELETE requests and deletes a blog from the mongodb by its id, need to add dunctionality to delete blogs ids from the user if deleted
 blogsRouter.delete('/:id', async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const user = request.user
 
   const blogToDelete = await Blog.findById(request.params.id)
 
   if(!blogToDelete){
     return response.status(401).json({ error: 'blog does not exist' })
   }
-
-  if(!(decodedToken.id === blogToDelete.user.toString())){
+  if(!(user.id === blogToDelete.user.toString())){
     return response.status(401).json({ error: 'invalid user' })
   }
+  request.user.blogs = user.blogs.filter(blog => blog.toString() !== request.params.id)
+
+  await request.user.save()
   await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
 
