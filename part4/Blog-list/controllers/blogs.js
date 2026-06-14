@@ -5,14 +5,7 @@ const jwt = require('jsonwebtoken')
 
 
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
 
-  if(authorization && authorization.startsWith('Bearer ')){
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
 
 
 //handles get requests for all the blogs and fetches all blogs from mongoDB
@@ -26,7 +19,7 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async(request, response) => {
   const blog = new Blog(request.body)
 
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if(!decodedToken){
     return response.status(401).json({ error: 'token invalid' })
   }
@@ -47,8 +40,20 @@ blogsRouter.post('/', async(request, response) => {
 
 //handles DELETE requests and deletes a blog from the mongodb by its id
 blogsRouter.delete('/:id', async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  const blogToDelete = await Blog.findById(request.params.id)
+
+  if(!blogToDelete){
+    return response.status(401).json({ error: 'blog does not exist' })
+  }
+
+  if(!(decodedToken.id === blogToDelete.user.toString())){
+    return response.status(401).json({ error: 'invalid user' })
+  }
   await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
+
 })
 
 blogsRouter.put('/:id', async (request, response) => {
