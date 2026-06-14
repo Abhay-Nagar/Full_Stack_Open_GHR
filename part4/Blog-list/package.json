@@ -20,9 +20,11 @@
     "test": "cross-env  NODE_ENV=test node --test",
     "lint": "eslint .",
     "test:only": "cross-env NODE_ENV=test node --test --test-only",
-    "test:blog:only": "cross-env NODE_ENV=test node --test --test-only tests/blog_api.test.js"
+    "test:blog:only": "cross-env NODE_ENV=test node --test --test-only tests/blog_api.test.js",
+    "test:user:only": "cross-env NODE_ENV=test node --test --test-only tests/users_api.test.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
