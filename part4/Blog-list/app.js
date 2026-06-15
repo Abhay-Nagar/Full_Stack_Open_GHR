@@ -6,6 +6,7 @@ const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
+
 const app = express()
 
 const mongoUrl = config.mongoUrl
