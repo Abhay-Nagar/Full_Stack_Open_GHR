@@ -17,10 +17,11 @@ const App = () => {
   }, [])
 
   const handleLogin = async (event) => {
-    event.preventDefault
-    try{
-      const response = await loginService.login({username: username, password: password})
-      setUser(response)
+    event.preventDefault()
+    try {
+      const usert = await loginService.login({ username, password })
+      setUser(usert)
+      console.log('wtfdgdgd', user)
       setUsername('')
       setPassword('')
     } catch {
@@ -54,6 +55,7 @@ const App = () => {
 
   return (
     <div>
+      <h2>{errorMessage}</h2>
       {loginForm()}
       <h2>blogs</h2>
       {blogs.map(blog =>
