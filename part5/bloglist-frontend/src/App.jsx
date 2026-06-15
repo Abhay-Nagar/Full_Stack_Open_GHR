@@ -8,7 +8,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [message, setMessage] = useState('')
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -45,11 +45,11 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
-      setErrorMessage('wrong credentials')
+      setMessage('wrong credentials')
       setUsername('')
       setPassword('')
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
     
@@ -69,8 +69,16 @@ const App = () => {
     setAuthor('')
     setUrl('')
     setBlogs(blogs.concat(blog))
-    console.log('this is blog',blog)
+    setMessage(`${blog.title} ${blog.author}`)
+    setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+
     } catch (exception){
+      setMessage('not a valid blog')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
       console.log(exception)
     }
   }
@@ -79,6 +87,7 @@ const App = () => {
   const loginForm = () => (
     <div>
     <h1>login form</h1>
+    <h1>{message}</h1>
     <form onSubmit={handleLogin}>
       <div>
         <div>
@@ -101,7 +110,8 @@ const App = () => {
 
   const loggedIn = () => (
     <div>
-    <h2>blogs</h2>
+    <h1>blogs</h1>
+    <h1>{message}</h1>
       <div>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </div>
@@ -135,7 +145,6 @@ const App = () => {
 
   return (
     <div>
-      <h2>{errorMessage}</h2>
       {!user && loginForm()}
       {user && loggedIn()}
     </div>
