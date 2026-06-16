@@ -59,7 +59,6 @@ blogsRouter.put('/:id', async (request, response) => {
   const { likes } = request.body
 
   const blogToUpdate = await Blog.findById(request.params.id)
-
   blogToUpdate.likes = likes
 
 
