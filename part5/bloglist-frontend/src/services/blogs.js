@@ -14,17 +14,22 @@ const getAll = () => {
 }
 
 const create = async (newBlog) => {
-  const config = {headers: {Authorization: token}}
+  const config = { headers: { Authorization: token } }
   const response = await axios.post(baseUrl, newBlog, config)
   console.log('this is response',response)
   return response.data
 }
 const update = async (updatedBlog) => {
 
-  const config = {headers: {Authorization: token}}
+  const config = { headers: { Authorization: token } }
   const response = await axios.put(`${baseUrl}/${updatedBlog.id}`, updatedBlog, config)
-  console.log('this is response',response)
   return response.data
 }
 
-export default { getAll , create, setToken, update}
+const atomize = async (id) => {
+  const config = { headers: { Authorization: token } }
+  const response = await axios.delete(`${baseUrl}/${id}`, config)
+  return response
+}
+
+export default { getAll , create, setToken, update, atomize }

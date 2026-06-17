@@ -25,12 +25,11 @@ blogsRouter.post('/', async(request, response) => {
 
   blog.user = user.id
   const savedBlog = await blog.save()
-  console.log(savedBlog)
   user.blogs = user.blogs.concat(savedBlog.id)
-
   await user.save()
+  const populatedBlog = await Blog.findById(savedBlog.id).populate('user', { username: 1, name: 1 })
 
-  response.status(201).json(savedBlog)
+  response.status(201).json(populatedBlog)
 
 })
 

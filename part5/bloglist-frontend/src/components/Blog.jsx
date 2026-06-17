@@ -1,45 +1,56 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
 
 
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlogs, user, deleteBlog }) => {
 
- const blogStyle = {
+  const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
   }
+  let belongsToUser = false
+  if(user.username === blog.user.username){
+    belongsToUser = true
+  }
 
+  const [visable, setVisable] = useState(false)
+  const [liked, setLiked] = useState(false)
 
-const [visable, setVisable] = useState(false)
+  const showDelete = { display: belongsToUser ? '' : 'none' }
+  const hideWhenLiked = { display: liked ? 'none' : '' }
 
-const handleLike = async () => {
-  blog.likes +=1
-  console.log(blog)
-  await blogService.update(blog)
+  const handleLike = async () => {
+    const updatedBlog = blog
+    updatedBlog.likes +=1
+    await blogService.update(updatedBlog)
+    setLiked(true)
+    console.log('this is blog comp',blog.likes)
+    updateBlogs(blog.id)
+  }
+
+  if(!visable){
+    return (
+      <div>
+        {blog.title} {blog.author}
+        <button onClick={() => {setVisable(true)}}>view</button>
+      </div>
+    )
+  } else {
+    return (
+      <div style={blogStyle}>
+        <div>{blog.title} {blog.author}<button onClick={() => {setVisable(false)}} >hide</button></div>
+        <div>{blog.url}</div>
+        <div>likes {blog.likes} <button onClick={handleLike} style={hideWhenLiked}>like</button></div>
+        <div>{blog.user.name}</div>
+        <button style={showDelete} onClick={() => deleteBlog(blog.id)}>delete</button>
+      </div>
+    )
+  }
 }
-
-if(!visable){
-  return (
-  <div>
-    {blog.title} {blog.author}
-    <button onClick={() => {setVisable(true)}}>view</button>
-  </div>  
-)
-} else {
-  return (
-    <div style={blogStyle}>
-    <div>{blog.title} {blog.author}<button onClick={() => {setVisable(false)}}>hide</button></div>
-  <div>{blog.url}</div>
-  <div>likes {blog.likes} <button onClick={handleLike}>like</button></div>
-  <div>{blog.user.id}</div>
-  </div>
-  )
-}
-} 
 
 export default Blog

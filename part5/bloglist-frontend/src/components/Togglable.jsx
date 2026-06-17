@@ -17,7 +17,7 @@ const Togglable = (props) => {
   useImperativeHandle(props.ref, () => {
     return { toggleVisibility }
   })
-  
+
   console.log(props.buttonLabel, 'this is buttonlabel')
 
   return (

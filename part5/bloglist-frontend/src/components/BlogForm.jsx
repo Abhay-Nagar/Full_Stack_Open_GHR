@@ -1,10 +1,10 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
 
 
 
 
-const Blogform = ({createBlog}) => {
+const Blogform = ({ createBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -14,34 +14,34 @@ const Blogform = ({createBlog}) => {
     setTitle('')
     setAuthor('')
     setUrl('')
-    createBlog({title, author, url})
+    createBlog({ title, author, url })
   }
 
-return(
+  return(
     <form onSubmit={handleCreate}>
+      <div>
         <div>
-          <div>
           <label>
             title
-            <input type="text" value={title} onChange={({target}) => setTitle(target.value)}/>
+            <input type="text" value={title} onChange={({ target }) => setTitle(target.value)}/>
           </label>
-          </div>
-          <div>
+        </div>
+        <div>
           <label>
             author
-            <input type="text" value={author} onChange={({target}) => setAuthor(target.value)}/>
+            <input type="text" value={author} onChange={({ target }) => setAuthor(target.value)}/>
           </label>
-          </div>
-          <div>
+        </div>
+        <div>
           <label>
             url
-            <input type="text" value={url} onChange={({target}) => setUrl(target.value)}/>
+            <input type="text" value={url} onChange={({ target }) => setUrl(target.value)}/>
           </label>
-          </div>
-          <button type="submit">create</button>
         </div>
-      </form>
-)
+        <button type="submit">create</button>
+      </div>
+    </form>
+  )
 }
 
 export default Blogform
