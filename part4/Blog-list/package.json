@@ -21,7 +21,8 @@
     "lint": "eslint .",
     "test:only": "cross-env NODE_ENV=test node --test --test-only",
     "test:blog:only": "cross-env NODE_ENV=test node --test --test-only tests/blog_api.test.js",
-    "test:user:only": "cross-env NODE_ENV=test node --test --test-only tests/users_api.test.js"
+    "test:user:only": "cross-env NODE_ENV=test node --test --test-only tests/users_api.test.js",
+    "start:test": "cross-env NODE_ENV=test node --watch index.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

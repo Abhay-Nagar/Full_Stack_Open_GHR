@@ -13,10 +13,8 @@ const Blog = ({ blog, updateBlogs, user, deleteBlog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  let belongsToUser = false
-  if(user.username === blog.user.username){
-    belongsToUser = true
-  }
+
+  const belongsToUser = user?.username === blog.user?.username
 
   const [visable, setVisable] = useState(false)
   const [liked, setLiked] = useState(false)
@@ -35,7 +33,7 @@ const Blog = ({ blog, updateBlogs, user, deleteBlog }) => {
 
   if(!visable){
     return (
-      <div>
+      <div className="blog">
         {blog.title} {blog.author}
         <button onClick={() => {setVisable(true)}}>view</button>
       </div>
@@ -46,7 +44,7 @@ const Blog = ({ blog, updateBlogs, user, deleteBlog }) => {
         <div>{blog.title} {blog.author}<button onClick={() => {setVisable(false)}} >hide</button></div>
         <div>{blog.url}</div>
         <div>likes {blog.likes}<button onClick={handleLike} style={hideWhenLiked}>like</button></div>
-        <div>{blog.user.name}</div>
+        <div>{blog.user?.name}</div>
         <button style={showDelete} onClick={() => deleteBlog(blog.id)}>delete</button>
       </div>
     )
