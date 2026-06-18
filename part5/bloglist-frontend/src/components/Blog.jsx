@@ -30,7 +30,7 @@ const Blog = ({ blog, updateBlogs, user, deleteBlog }) => {
     await blogService.update(updatedBlog)
     setLiked(true)
     console.log('this is blog comp',blog.likes)
-    updateBlogs(blog.id)
+    updateBlogs(blog)
   }
 
   if(!visable){
