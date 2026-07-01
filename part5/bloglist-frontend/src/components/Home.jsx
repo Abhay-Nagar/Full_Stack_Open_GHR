@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 import Blog from './Blog'
+import { Link } from 'react-router-dom'
+
 const Home = ({ user }) => {
 
   const [blogs, setBlogs] = useState([])
@@ -60,11 +62,12 @@ const Home = ({ user }) => {
     <div>
       <h1>blogs</h1>
       <h1>{message}</h1>
-      {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} updateBlogs={updateBlogsLikes} user={user} deleteBlog={deleteBlog}/>)}
+      {sortedBlogs.map(blog => <div><Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link></div>)}
     </div>
   )
 }
 
+//<Blog key={blog.id} blog={blog} updateBlogs={updateBlogsLikes} user={user} deleteBlog={deleteBlog}/>
 /*<h1>{message}</h1>
 <Togglable buttonLabel='create new blog' ref={blogFormRef}>
         <Blogform createBlog={createBlog} />

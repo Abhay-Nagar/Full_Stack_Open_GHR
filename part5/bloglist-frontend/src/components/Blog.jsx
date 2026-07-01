@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
-
+import { Link } from 'react-router-dom'
 
 
 
@@ -34,8 +34,7 @@ const Blog = ({ blog, updateBlogs, user, deleteBlog }) => {
   if(!visable){
     return (
       <div className="blog">
-        {blog.title} {blog.author}
-        <button onClick={() => {setVisable(true)}}>view</button>
+        <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
       </div>
     )
   } else {

@@ -52,7 +52,7 @@ const App = () => {
   }
 
   const loggedOut = () => (
-    <Router>
+    <div>
       <div>
         <Link style={padding} to="/">blogs</Link>
         <Link style={padding} to="/login">login</Link>
@@ -63,11 +63,11 @@ const App = () => {
         <Route path="/login" element={ <LoginForm loginUser = {loginUser}/> } />
         <Route path="/" element={<Home handleLogout = {handleLogout} user= {user}/>} />
       </Routes>
-    </Router>
+    </div>
   )
 
   const loggedIn = () => (
-    <Router>
+    <div>
       <div>
         <Link style={padding} to="/">blogs</Link>
         <button onClick={handleLogout}>logout</button>
@@ -77,7 +77,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home user= {user}/>} />
       </Routes>
-    </Router>
+    </div>
   )
 
   return(
