@@ -1,24 +1,23 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
 import Blogform from './components/BlogForm'
 import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
+import Home from './components/Home'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  const [message, setMessage] = useState('')
-  const blogFormRef = useRef()
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+  const [user, setUser] = useState(null)
+
+  //const blogFormRef = useRef()
+
+
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem('loggedBlogappUser')
@@ -33,24 +32,8 @@ const App = () => {
 
 
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      setUser(user)
-      console.log('wtfdgdgd', user)
-      blogService.setToken(user.token)
-      setUsername('')
-      setPassword('')
-    } catch {
-      setMessage('wrong credentials')
-      setUsername('')
-      setPassword('')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-    }
+  const loginUser = (loggedInUser) => {
+    setUser(loggedInUser)
 
   }
 
@@ -60,90 +43,47 @@ const App = () => {
     blogService.setToken('')
   }
 
-  const deleteBlog = async (id) => {
-    try{
-      await blogService.atomize(id)
-      setBlogs(blogs.filter(blog => blog.id !== id))
-    } catch(exception) {
-      setMessage('unable to delete at this moment')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-      console.log(exception)
-    }
+
+
+
+
+  const padding = {
+    padding: 5
   }
 
-  const createBlog = async ({ title, author, url }) => {
+  const loggedOut = () => (
+    <Router>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/login">login</Link>
+      </div>
 
-    try{
-      blogFormRef.current.toggleVisibility
-      const newBlog = { title, author, url }
-      const blog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(blog))
-      setMessage(`${blog.title} ${blog.author}`)
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
 
-    } catch (exception){
-      setMessage('not a valid blog')
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-      console.log(exception)
-    }
-  }
-
-  const updateBlogsLikes = (updatedBlog) => {
-    const updatedBlogs = blogs.map(blog => blog = updatedBlog.id === blog.id ? updatedBlog : blog)
-    console.log('this is app comp',updatedBlogs)
-    setBlogs(updatedBlogs)
-  }
-
-  const sortedBlogs = blogs.sort((a, b) => b.likes-a.likes)
-
-  const loginForm = () => (
-    <div>
-      <h1>login form</h1>
-      <h1>{message}</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-          <div>
-            <label>
-            username
-              <input type="text" value={username} onChange={({ target }) => setUsername(target.value)}/>
-            </label>
-          </div>
-          <div>
-            <label>
-            password
-              <input type="text" value={password} onChange={({ target }) => setPassword(target.value)}/>
-            </label>
-          </div>
-          <button type="submit">login</button>
-        </div>
-      </form>
-    </div>
+      <Routes>
+        <Route path="/login" element={ <LoginForm loginUser = {loginUser}/> } />
+        <Route path="/" element={<Home handleLogout = {handleLogout} user= {user}/>} />
+      </Routes>
+    </Router>
   )
 
   const loggedIn = () => (
-    <div>
-      <h1>blogs</h1>
-      <h1>{message}</h1>
-      <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-        <Blogform createBlog={createBlog} />
-      </Togglable>
+    <Router>
       <div>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
+        <Link style={padding} to="/">blogs</Link>
+        <button onClick={handleLogout}>logout</button>
       </div>
-      {sortedBlogs.map(blog => <Blog key={blog.id} blog={blog} updateBlogs={updateBlogsLikes} user={user} deleteBlog={deleteBlog}/>)}
-    </div>
+
+
+      <Routes>
+        <Route path="/" element={<Home user= {user}/>} />
+      </Routes>
+    </Router>
   )
 
-  return (
+  return(
     <div>
-      {!user && loginForm()}
       {user && loggedIn()}
+      {!user && loggedOut()}
     </div>
   )
 }
